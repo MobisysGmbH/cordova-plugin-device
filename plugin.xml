@@ -43,6 +43,7 @@
         </config-file>
 
         <source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />
+        <framework src="com.github.ltrudu:DeviceIdentifiersWrapper:0.2" />
     </platform>
 
     <!-- ios -->

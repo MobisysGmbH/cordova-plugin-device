@@ -18,19 +18,28 @@
 */
 package org.apache.cordova.device;
 
-import java.util.TimeZone;
+import android.content.Context;
+import android.provider.Settings;
+import android.util.Log;
 
-import org.apache.cordova.CordovaWebView;
+import com.zebra.deviceidentifierswrapper.DIHelper;
+import com.zebra.deviceidentifierswrapper.IDIResultCallbacks;
+
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.provider.Settings;
+import java.util.TimeZone;
 
 public class Device extends CordovaPlugin {
+
+    private CallbackContext _callbackContext;
+    private JSONObject _returnValue = new JSONObject();
+
     public static final String TAG = "Device";
 
     public static String platform;                            // Device OS
@@ -39,6 +48,7 @@ public class Device extends CordovaPlugin {
     private static final String ANDROID_PLATFORM = "Android";
     private static final String AMAZON_PLATFORM = "amazon-fireos";
     private static final String AMAZON_DEVICE = "Amazon";
+    private static final String ZEBRA_DEVICE = "zebra";
 
     /**
      * Constructor.
@@ -59,7 +69,15 @@ public class Device extends CordovaPlugin {
     }
 
     /**
-     * Executes the request and returns PluginResult.
+     * Executes the request and stores all collected
+     * device info (like OS, platform, model, serial etc...)
+     * in a JSONObject (= PluginResult).
+     *
+     * In case of a zebra device running Android 10 or higher,
+     * PluginResult will be modified and returned in one of the callbacks
+     * of "triggerZebraSNRetrieval()"
+     *
+     * In any other cases or devices, PluginResult is returned immediately.
      *
      * @param action            The action to execute.
      * @param args              JSONArry of arguments for the plugin.
@@ -67,22 +85,101 @@ public class Device extends CordovaPlugin {
      * @return                  True if the action was valid, false if not.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+
+        this._callbackContext = callbackContext;
+
         if ("getDeviceInfo".equals(action)) {
-            JSONObject r = new JSONObject();
-            r.put("uuid", Device.uuid);
-            r.put("version", this.getOSVersion());
-            r.put("platform", this.getPlatform());
-            r.put("model", this.getModel());
-            r.put("manufacturer", this.getManufacturer());
-	        r.put("isVirtual", this.isVirtual());
-            r.put("serial", this.getSerialNumber());
-            callbackContext.success(r);
+
+            addToReturnValue("uuid", Device.uuid);
+            addToReturnValue("version", this.getOSVersion());
+            addToReturnValue("platform", this.getPlatform());
+            addToReturnValue("model", this.getModel());
+            addToReturnValue("manufacturer", this.getManufacturer());
+            addToReturnValue("isVirtual", this.isVirtual());
+
+            // Due to privacy restrictions ALL devices running on Android 10 or higher
+            // "getSerialNumber()" will just return the string "unknown" instead of the real device serial number ...
+            addToReturnValue("serial", this.getSerialNumber());
+
+            // ... luckily, at least zebra devices offer a way to deliver their serial number on Android 10 or higher.
+            // So in case the device is a zebra device running on Android >= 10
+            // we are trying to (asynchronously) access the serial number via a DeviceIdentifiersWrapper
+            // and replace the "unknown" serial number in the PluginResult with the real serial number.
+            if (this.isZebraDevice() && android.os.Build.VERSION.SDK_INT >= 29) {
+                this.triggerZebraSNRetrieval(this.cordova.getContext());
+            } else {
+                // in any other case, we instantly return the collected device values back to the caller
+                // (serial number will be "unknown")
+                finishPluginCallback();
+            }
+
+            return true;
         }
         else {
             return false;
         }
-        return true;
+
     }
+
+    /**
+     * Helper function to store values in PluginResult (= JSONObject)
+     *
+     * @param key            The key (e.g. "uuid")
+     * @param value          The value (e.g. "61363bf5509a717f")
+     * @return
+     */
+    private void addToReturnValue(String key, Object value)  {
+        try {
+            this._returnValue.put(key, value);
+        } catch(Exception e) {
+            Log.e("addToReturnValue", e.getMessage());
+        }
+    }
+
+    /**
+     * Helper function to return PluginResult to the caller
+     *
+     * @return
+     */
+    private void finishPluginCallback() {
+        this._callbackContext.success(this._returnValue);
+    }
+
+    /**
+     * Retrieves the serial number of a zebra device using a DeviceIdentifiersWrapper
+     *
+     * For more information see:
+     * https://github.com/ZebraDevs/DeviceIdentifiersWrapper
+     *
+     * @return
+     */
+    private void triggerZebraSNRetrieval(Context context)
+    {
+        DIHelper.getSerialNumber(context, new IDIResultCallbacks() {
+            @Override
+            public void onSuccess(String serialNumber) {
+                // replace "unknown" with the real serial number in the PluginResult
+                addToReturnValue("serial", serialNumber);
+                finishPluginCallback();
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.e("triggerZebraSNRetrieval", message);
+                // in case the serial number couldn't be retrieved by the DeviceIdentifiersWrapper
+                // the serial number is "unknown" in the PluginResult
+                finishPluginCallback();
+            }
+
+            @Override
+            public void onDebugStatus(String message) {
+                // You can use this method to get verbose information
+                // about what's happening behind the curtain
+                Log.i("triggerZebraSNRetrieval", message);
+            }
+        });
+    }
+
 
     //--------------------------------------------------------------------------
     // LOCAL METHODS
@@ -161,6 +258,18 @@ public class Device extends CordovaPlugin {
      */
     public boolean isAmazonDevice() {
         if (android.os.Build.MANUFACTURER.equals(AMAZON_DEVICE)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Function to check if the device is manufactured by Zebra
+     *
+     * @return
+     */
+    public static boolean isZebraDevice() {
+        if (android.os.Build.MANUFACTURER.toLowerCase().startsWith(ZEBRA_DEVICE)) {
             return true;
         }
         return false;
