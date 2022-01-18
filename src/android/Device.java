@@ -269,10 +269,7 @@ public class Device extends CordovaPlugin {
      * @return
      */
     public static boolean isZebraDevice() {
-        if (android.os.Build.MANUFACTURER.toLowerCase().startsWith(ZEBRA_DEVICE)) {
-            return true;
-        }
-        return false;
+        return android.os.Build.MANUFACTURER.toLowerCase().startsWith(ZEBRA_DEVICE);
     }
 
     public boolean isVirtual() {
