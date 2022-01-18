@@ -264,9 +264,9 @@ public class Device extends CordovaPlugin {
     }
 
     /**
-     * Function to check if the device is manufactured by Zebra
+     * Checks if this device is manufactured by Zebra.
      *
-     * @return
+     * @return True if this device is manufactured by Zebra, false if not.
      */
     public static boolean isZebraDevice() {
         return android.os.Build.MANUFACTURER.toLowerCase().startsWith(ZEBRA_DEVICE);
