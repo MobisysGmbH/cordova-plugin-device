@@ -36,6 +36,8 @@
 
     <!-- android -->
     <platform name="android">
+        <framework src="com.github.ltrudu:DeviceIdentifiersWrapper:0.2" />
+        
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Device" >
                 <param name="android-package" value="org.apache.cordova.device.Device"/>
@@ -43,7 +45,6 @@
         </config-file>
 
         <source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />
-        <framework src="com.github.ltrudu:DeviceIdentifiersWrapper:0.2" />
     </platform>
 
     <!-- ios -->
