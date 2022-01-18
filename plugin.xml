@@ -43,6 +43,10 @@
                 <param name="android-package" value="org.apache.cordova.device.Device"/>
             </feature>
         </config-file>
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+           <uses-permission android:name="com.zebra.provider.READ" />
+           <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+         </config-file>
 
         <source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />
     </platform>
