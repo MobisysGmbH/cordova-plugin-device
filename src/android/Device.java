@@ -163,7 +163,7 @@ public class Device extends CordovaPlugin {
 
             @Override
             public void onError(String message) {
-                Log.e("triggerZebraSNRetrieval", message);
+                Log.e(TAG, "error while retrieving Zebra serial number: " + message);
                 // in case the serial number couldn't be retrieved by the DeviceIdentifiersWrapper
                 // the serial number is "unknown" in the PluginResult
                 finishPluginCallback();
