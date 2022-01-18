@@ -37,10 +37,7 @@ import java.util.TimeZone;
 
 public class Device extends CordovaPlugin {
 
-    private CallbackContext _callbackContext;
-    private JSONObject _returnValue = new JSONObject();
-
-    public static final String TAG = "Device";
+    public static final String TAG = Device.class.getCanonicalName();
 
     public static String platform;                            // Device OS
     public static String uuid;                                // Device UUID
@@ -69,80 +66,60 @@ public class Device extends CordovaPlugin {
     }
 
     /**
-     * Executes the request and stores all collected
-     * device info (like OS, platform, model, serial etc...)
-     * in a JSONObject (= PluginResult).
-     *
-     * In case of a zebra device running Android 10 or higher,
-     * PluginResult will be modified and returned in one of the callbacks
-     * of "triggerZebraSNRetrieval()"
-     *
-     * In any other cases or devices, PluginResult is returned immediately.
+     * Executes the request
      *
      * @param action            The action to execute.
-     * @param args              JSONArry of arguments for the plugin.
+     * @param args              JSONArray of arguments for the plugin.
      * @param callbackContext   The callback id used when calling back into JavaScript.
      * @return                  True if the action was valid, false if not.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-
-        this._callbackContext = callbackContext;
-
         if ("getDeviceInfo".equals(action)) {
-
-            addToReturnValue("uuid", Device.uuid);
-            addToReturnValue("version", this.getOSVersion());
-            addToReturnValue("platform", this.getPlatform());
-            addToReturnValue("model", this.getModel());
-            addToReturnValue("manufacturer", this.getManufacturer());
-            addToReturnValue("isVirtual", this.isVirtual());
-
-            // Due to privacy restrictions ALL devices running on Android 10 or higher
-            // "getSerialNumber()" will just return the string "unknown" instead of the real device serial number ...
-            addToReturnValue("serial", this.getSerialNumber());
-
-            // ... luckily, at least zebra devices offer a way to deliver their serial number on Android 10 or higher.
-            // So in case the device is a zebra device running on Android >= 10
-            // we are trying to (asynchronously) access the serial number via a DeviceIdentifiersWrapper
-            // and replace the "unknown" serial number in the PluginResult with the real serial number.
-            if (this.isZebraDevice() && android.os.Build.VERSION.SDK_INT >= 29) {
-                this.retrieveZebraSerialNumber(this.cordova.getContext());
-            } else {
-                // in any other case, we instantly return the collected device values back to the caller
-                // (serial number will be "unknown")
-                finishPluginCallback();
-            }
-
+            getDeviceInfo(callbackContext);
             return true;
         }
         else {
             return false;
         }
-
     }
 
     /**
-     * Helper function to store values in PluginResult (= JSONObject)
+     * Stores all collected device info (like OS, platform, model, serial etc...)
+     * in a JSONObject (= pluginResult).
      *
-     * @param key            The key (e.g. "uuid")
-     * @param value          The value (e.g. "61363bf5509a717f")
+     * In case of a zebra device running Android 10 or higher,
+     * pluginResult will be modified and returned in one of the callbacks
+     * of "retrieveZebraSerialNumber()"
+     *
+     * In any other cases or devices, pluginResult is returned immediately.
+     *
+     * @param callbackContext   The callback id used when calling back into JavaScript.
      * @return
      */
-    private void addToReturnValue(String key, Object value)  {
-        try {
-            this._returnValue.put(key, value);
-        } catch(Exception e) {
-            Log.e("addToReturnValue", e.getMessage());
+    private void getDeviceInfo(CallbackContext callbackContext) throws JSONException {
+        JSONObject pluginResult = new JSONObject();
+        pluginResult.put("uuid", Device.uuid);
+        pluginResult.put("version", this.getOSVersion());
+        pluginResult.put("platform", this.getPlatform());
+        pluginResult.put("model", this.getModel());
+        pluginResult.put("manufacturer", this.getManufacturer());
+        pluginResult.put("isVirtual", this.isVirtual());
+
+        // Due to privacy restrictions ALL devices running on Android 10 or higher
+        // "getSerialNumber()" will just return the string "unknown" instead of the real device serial number ...
+        pluginResult.put("serial", this.getSerialNumber());
+
+        // ... luckily, at least zebra devices offer a way to deliver their serial number on Android 10 or higher.
+        // So in case the device is a zebra device running on Android >= 10
+        // we are trying to (asynchronously) access the serial number via a DeviceIdentifiersWrapper
+        // and replace the "unknown" serial number in the PluginResult with the real serial number.
+        if (this.isZebraDevice() && android.os.Build.VERSION.SDK_INT >= 29) {
+            this.retrieveZebraSerialNumber(this.cordova.getContext(), callbackContext, pluginResult);
+        } else {
+            // in any other case, we instantly return the collected device values back to the caller
+            // (serial number will be "unknown" if device runs Android 10 or higher)
+            callbackContext.success(pluginResult);
         }
-    }
-
-    /**
-     * Helper function to return PluginResult to the caller
-     *
-     * @return
-     */
-    private void finishPluginCallback() {
-        this._callbackContext.success(this._returnValue);
     }
 
     /**
@@ -150,15 +127,24 @@ public class Device extends CordovaPlugin {
      *
      * For more information see:
      * https://github.com/ZebraDevs/DeviceIdentifiersWrapper
+     *
+     * @param context            The Android context
+     * @param callbackContext    The callback id used when calling back into JavaScript.
+     * @param pluginResult       A JSONObject which contains already gathered device info (like OS, platform, model, serial etc...)
      */
-    private void triggerZebraSNRetrieval(Context context)
+    private void retrieveZebraSerialNumber(Context context, CallbackContext callbackContext, JSONObject pluginResult)
     {
         DIHelper.getSerialNumber(context, new IDIResultCallbacks() {
             @Override
-            public void onSuccess(String serialNumber) {
-                // replace "unknown" with the real serial number in the PluginResult
-                addToReturnValue("serial", serialNumber);
-                finishPluginCallback();
+            public void onSuccess(String serialNumber)  {
+                try {
+                    // replace "unknown" with the real serial number in the pluginResult
+                    pluginResult.put("serial", serialNumber);
+                } catch (JSONException e) {
+                    Log.i(TAG, e.getMessage());
+                } finally {
+                    callbackContext.success(pluginResult);
+                }
             }
 
             @Override
@@ -166,7 +152,7 @@ public class Device extends CordovaPlugin {
                 Log.e(TAG, "error while retrieving Zebra serial number: " + message);
                 // in case the serial number couldn't be retrieved by the DeviceIdentifiersWrapper
                 // the serial number is "unknown" in the PluginResult
-                finishPluginCallback();
+                callbackContext.success(pluginResult);
             }
 
             @Override
@@ -271,8 +257,8 @@ public class Device extends CordovaPlugin {
     }
 
     public boolean isVirtual() {
-	return android.os.Build.FINGERPRINT.contains("generic") ||
-	    android.os.Build.PRODUCT.contains("sdk");
+        return android.os.Build.FINGERPRINT.contains("generic") ||
+                android.os.Build.PRODUCT.contains("sdk");
     }
 
 }
