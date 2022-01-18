@@ -173,7 +173,7 @@ public class Device extends CordovaPlugin {
             public void onDebugStatus(String message) {
                 // You can use this method to get verbose information
                 // about what's happening behind the curtain
-                Log.i("triggerZebraSNRetrieval", message);
+                Log.d(TAG, "Zebra serial number retrieval debug status: " + message);
             }
         });
     }
