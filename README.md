@@ -25,7 +25,7 @@ description: Get device information.
 
 [![Android Testsuite](https://github.com/apache/cordova-plugin-device/actions/workflows/android.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/android.yml) [![Chrome Testsuite](https://github.com/apache/cordova-plugin-device/actions/workflows/chrome.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/chrome.yml) [![iOS Testsuite](https://github.com/apache/cordova-plugin-device/actions/workflows/ios.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/ios.yml) [![Lint Test](https://github.com/apache/cordova-plugin-device/actions/workflows/lint.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/lint.yml)
 
-## Info
+## Notice
 This is a fork of the oficial [cordova-plugin-device](https://github.com/apache/cordova-plugin-device) adding the possibility to read out the serial number of a zebra device running on Android 10 or higher by using [DeviceIdentifiersWrapper](https://github.com/ZebraDevs/DeviceIdentifiersWrapper).
 * * *
 
