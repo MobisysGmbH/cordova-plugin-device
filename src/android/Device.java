@@ -146,12 +146,10 @@ public class Device extends CordovaPlugin {
     }
 
     /**
-     * Retrieves the serial number of a zebra device using a DeviceIdentifiersWrapper
+     * Tries to retrieve the serial number of a Zebra device using DeviceIdentifiersWrapper.
      *
      * For more information see:
      * https://github.com/ZebraDevs/DeviceIdentifiersWrapper
-     *
-     * @return
      */
     private void triggerZebraSNRetrieval(Context context)
     {
