@@ -106,7 +106,7 @@ public class Device extends CordovaPlugin {
             // we are trying to (asynchronously) access the serial number via a DeviceIdentifiersWrapper
             // and replace the "unknown" serial number in the PluginResult with the real serial number.
             if (this.isZebraDevice() && android.os.Build.VERSION.SDK_INT >= 29) {
-                this.triggerZebraSNRetrieval(this.cordova.getContext());
+                this.retrieveZebraSerialNumber(this.cordova.getContext());
             } else {
                 // in any other case, we instantly return the collected device values back to the caller
                 // (serial number will be "unknown")
