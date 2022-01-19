@@ -47,6 +47,7 @@
         <config-file parent="/manifest" target="AndroidManifest.xml">
            <uses-permission android:name="com.zebra.provider.READ" />
            <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+           <uses-library android:name="com.symbol.emdk" android:required="false" />
          </config-file>
 
         <source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />
