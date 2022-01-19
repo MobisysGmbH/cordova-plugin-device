@@ -94,7 +94,6 @@ public class Device extends CordovaPlugin {
      * In any other cases or devices, pluginResult is returned immediately.
      *
      * @param callbackContext   The callback id used when calling back into JavaScript.
-     * @return
      */
     private void getDeviceInfo(CallbackContext callbackContext) throws JSONException {
         JSONObject pluginResult = new JSONObject();
@@ -141,7 +140,7 @@ public class Device extends CordovaPlugin {
                     // replace "unknown" with the real serial number in the pluginResult
                     pluginResult.put("serial", serialNumber);
                 } catch (JSONException e) {
-                    Log.i(TAG, e.getMessage());
+                    Log.e(TAG, "error while assigning serial number to JSONObject: " + e.getMessage());
                 } finally {
                     callbackContext.success(pluginResult);
                 }
