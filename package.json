@@ -1,10 +1,10 @@
 {
-  "name": "cordova-plugin-device",
+  "name": "@mobisys/cordova-plugin-device",
   "version": "2.0.4-dev",
   "description": "Cordova Device Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
-    "id": "cordova-plugin-device",
+    "id": "@mobisys/cordova-plugin-device",
     "platforms": [
       "android",
       "ios",

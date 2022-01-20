@@ -65,7 +65,7 @@ function Device () {
             },
             function (e) {
                 me.available = false;
-                console.error('[ERROR] Error initializing cordova-plugin-device: ' + e);
+                console.error('[ERROR] Error initializing @mobisys/cordova-plugin-device: ' + e);
             }
         );
     });
