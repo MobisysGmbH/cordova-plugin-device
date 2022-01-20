@@ -13,8 +13,8 @@
       "osx"
     ]
   },
-  "repository": "github:apache/cordova-plugin-device",
-  "bugs": "https://github.com/apache/cordova-plugin-device/issues",
+  "repository": "github:MobisysGmbH/cordova-plugin-device",
+  "bugs": "https://github.com/MobisysGmbH/cordova-plugin-device/issues",
   "keywords": [
     "cordova",
     "device",

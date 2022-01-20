@@ -1,5 +1,5 @@
 // Type definitions for cordova-plugin-device
-// Project: https://github.com/apache/cordova-plugin-device
+// Project: https://github.com/MobisysGmbH/cordova-plugin-device
 // Definitions by: Microsoft Open Technologies Inc <http://msopentech.com>
 //                 Tim Brust <https://github.com/timbru31>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
