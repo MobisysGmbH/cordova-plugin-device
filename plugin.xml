@@ -36,12 +36,21 @@
 
     <!-- android -->
     <platform name="android">
+        <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
+        <framework src="com.github.ltrudu:DeviceIdentifiersWrapper:0.2" />
+        
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Device" >
                 <param name="android-package" value="org.apache.cordova.device.Device"/>
             </feature>
         </config-file>
-
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+           <uses-permission android:name="com.zebra.provider.READ" />
+           <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+         </config-file>
+         <config-file parent="/manifest/application" target="AndroidManifest.xml">
+           <uses-library android:name="com.symbol.emdk" android:required="false" />
+         </config-file>
         <source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />
     </platform>
 

@@ -21,9 +21,14 @@ description: Get device information.
 #         under the License.
 -->
 
-# cordova-plugin-device
+# mobisys-cordova-plugin-device
 
 [![Android Testsuite](https://github.com/apache/cordova-plugin-device/actions/workflows/android.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/android.yml) [![Chrome Testsuite](https://github.com/apache/cordova-plugin-device/actions/workflows/chrome.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/chrome.yml) [![iOS Testsuite](https://github.com/apache/cordova-plugin-device/actions/workflows/ios.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/ios.yml) [![Lint Test](https://github.com/apache/cordova-plugin-device/actions/workflows/lint.yml/badge.svg)](https://github.com/apache/cordova-plugin-device/actions/workflows/lint.yml)
+
+## Notice
+
+This is a fork of the official [cordova-plugin-device](https://github.com/apache/cordova-plugin-device) with the goal to add the possibility to read the serial number of Zebra devices running on Android 10 or higher by using Zebra's [DeviceIdentifiersWrapper](https://github.com/ZebraDevs/DeviceIdentifiersWrapper).
+* * *
 
 This plugin defines a global `device` object, which describes the device's hardware and software.
 Although the object is in the global scope, it is not available until after the `deviceready` event.

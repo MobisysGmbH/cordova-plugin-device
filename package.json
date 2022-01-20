@@ -38,6 +38,9 @@
       }
     }
   },
+  "publishConfig": {
+    "registry": "https://pkgs.dev.azure.com/mobisysgmbh/_packaging/mobisys/npm/registry/"
+  },
   "devDependencies": {
     "@cordova/eslint-config": "^3.0.0"
   }
