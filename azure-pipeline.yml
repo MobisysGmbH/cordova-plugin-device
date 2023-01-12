@@ -1,0 +1,23 @@
+resources:
+  repositories:
+    - repository: devops
+      type: github
+      name: MobisysGmbh/devops-templates
+      endpoint: MobisysGmbH
+      ref: refs/heads/release/v5
+
+trigger: none
+pr: none
+
+extends:
+  template: /yaml/kickstarter-templates/package-pipeline.yml@devops
+  parameters:
+    vmImage: ubuntu-latest
+    packageType: npm
+    linterSteps:
+      - script: npm run lint:ci
+        displayName: Run Linter
+    buildSteps:
+      - script: npm run build:ci
+        displayName: Transpile Typescript files
+    artifactsDirectoryToPublish: $(Build.SourcesDirectory)
