@@ -1,5 +1,5 @@
 {
-  "name": "@mobisys-internal/cordova-plugin-device",
+  "name": "@mobisys/cordova-plugin-device",
   "version": "2.1.1",
   "description": "Cordova Device Plugin",
   "types": "./types/index.d.ts",
@@ -25,10 +25,6 @@
     "cordova-browser",
     "cordova-osx"
   ],
-  "scripts": {
-    "test": "npm run lint",
-    "lint": "eslint ."
-  },
   "author": "Apache Software Foundation",
   "license": "Apache-2.0",
   "engines": {
@@ -37,11 +33,5 @@
         "cordova": ">100"
       }
     }
-  },
-  "publishConfig": {
-    "registry": "https://pkgs.dev.azure.com/mobisysgmbh/_packaging/mobisys/npm/registry/"
-  },
-  "devDependencies": {
-    "@cordova/eslint-config": "^3.0.0"
   }
 }

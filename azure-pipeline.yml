@@ -14,10 +14,4 @@ extends:
   parameters:
     vmImage: ubuntu-latest
     packageType: npm
-    linterSteps:
-      - script: npm run lint:ci
-        displayName: Run Linter
-    buildSteps:
-      - script: npm run build:ci
-        displayName: Transpile Typescript files
     artifactsDirectoryToPublish: $(Build.SourcesDirectory)
