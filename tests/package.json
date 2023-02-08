@@ -1,6 +1,6 @@
 {
   "name": "@mobisys-internal/cordova-plugin-device-tests",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "",
   "cordova": {
     "id": "@mobisys-internal/cordova-plugin-device-tests",
