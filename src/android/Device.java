@@ -103,6 +103,7 @@ public class Device extends CordovaPlugin {
         pluginResult.put("model", this.getModel());
         pluginResult.put("manufacturer", this.getManufacturer());
         pluginResult.put("isVirtual", this.isVirtual());
+        pluginResult.put("sdkLevel", this.getSDKIntVersion());
 
         // Due to privacy restrictions ALL devices running on Android 10 or higher
         // "getSerialNumber()" will just return the string "unknown" instead of the real device serial number ...
@@ -221,6 +222,11 @@ public class Device extends CordovaPlugin {
     public String getOSVersion() {
         String osversion = android.os.Build.VERSION.RELEASE;
         return osversion;
+    }
+
+    public int getSDKIntVersion() {
+        int sdkintversion = android.os.Build.VERSION.SDK_INT;
+        return sdkintversion;
     }
 
     public String getSDKVersion() {

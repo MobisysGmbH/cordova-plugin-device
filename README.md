@@ -55,6 +55,7 @@ function onDeviceReady() {
 - device.manufacturer
 - device.isVirtual
 - device.serial
+- device.sdkLevel
 
 ## device.cordova
 
@@ -285,3 +286,15 @@ var string = device.serial;
 ### Android Quirk
 
 As of Android 9, the underlying native API that powered the `uuid` property is deprecated and will always return `UNKNOWN` without proper permissions. Cordova have never implemented handling the required permissions. As of Android 10, **all** non-resettable device identifiers are no longer readable by normal applications and will always return `UNKNOWN`. More information can be [read here](https://developer.android.com/about/versions/10/privacy/changes#non-resettable-device-ids).
+
+## device.sdkLevel
+
+Get the SDK version of the software currently running on this hardware device ([SDK_INT](https://developer.android.com/reference/android/os/Build.VERSION#SDK_INT)). On Android this returns a number >= `1`, on all other platforms this returns `0`.
+
+```js
+var string = device.sdkLevel;
+```
+
+### Supported Platforms
+
+- Android
