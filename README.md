@@ -2,6 +2,7 @@
 title: Device
 description: Get device information.
 ---
+
 <!--
 # license: Licensed to the Apache Software Foundation (ASF) under one
 #         or more contributor license agreements.  See the NOTICE file
@@ -23,21 +24,20 @@ description: Get device information.
 
 # @mobisys-internal/cordova-plugin-device
 
-[![Android Testsuite](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/android.yml/badge.svg)](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/android.yml) [![Chrome Testsuite](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/chrome.yml/badge.svg)](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/chrome.yml) [![iOS Testsuite](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/ios.yml/badge.svg)](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/ios.yml) [![Lint Test](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/lint.yml/badge.svg)](https://github.com/MobisysGmbH/cordova-plugin-device/actions/workflows/lint.yml)
-
 ## Notice
 
-This is a fork of the official [cordova-plugin-device](https://github.com/apache/cordova-plugin-device) with the goal to add the possibility to read the serial number of Zebra devices running on Android 10 or higher by using Zebra's [DeviceIdentifiersWrapper](https://github.com/ZebraDevs/DeviceIdentifiersWrapper).
+This is a fork of the official [cordova-plugin-device](https://github.com/apache/cordova-plugin-device) with the goal to add the possibility to read the serial number of Zebra devices running on Android 10 or higher by using Zebra's [DeviceIdentifiersWrapper](https://github.com/ZebraDevs/MX-EMDK-Android-Java-DeviceIdentifiersWrapper).
 
-* * *
+---
 
 This plugin defines a global `device` object, which describes the device's hardware and software.
 Although the object is in the global scope, it is not available until after the `deviceready` event.
 
 ```js
 document.addEventListener("deviceready", onDeviceReady, false);
+
 function onDeviceReady() {
-    console.log(device.cordova);
+  console.log(device.cordova);
 }
 ```
 
@@ -107,6 +107,7 @@ Get the device's operating system name.
 ```js
 var string = device.platform;
 ```
+
 ### Supported Platforms
 
 - Android
