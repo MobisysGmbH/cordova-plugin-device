@@ -37,7 +37,7 @@
     <!-- android -->
     <platform name="android">
         <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
-        <framework src="com.github.ltrudu:DeviceIdentifiersWrapper:0.2" />
+        <framework src="com.github.ltrudu:DeviceIdentifiersWrapper:0.9.3" />
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Device" >
@@ -47,8 +47,10 @@
         <config-file parent="/manifest" target="AndroidManifest.xml">
             <uses-permission android:name="com.zebra.provider.READ" />
             <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+            <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
             <queries>
-                <package android:name="com.zebra.zebracontentprovider" />
+                <provider android:authorities="oem_info" />
+                <package android:name="com.symbol.emdk.emdkservice" />
             </queries>
          </config-file>
          <config-file parent="/manifest/application" target="AndroidManifest.xml">
