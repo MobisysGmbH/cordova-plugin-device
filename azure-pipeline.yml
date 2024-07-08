@@ -13,5 +13,7 @@ extends:
   template: /yaml/kickstarter-templates/package-pipeline.yml@devops
   parameters:
     vmImage: ubuntu-latest
+    requireNvmrc: true
+    allowedPublishingBranches: refs/heads/master
     packageType: npm
     artifactsDirectoryToPublish: $(Build.SourcesDirectory)
