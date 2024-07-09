@@ -4,7 +4,7 @@ resources:
       type: github
       name: MobisysGmbh/devops-templates
       endpoint: MobisysGmbH
-      ref: refs/heads/release/v5
+      ref: refs/heads/release/v7
 
 trigger: none
 pr: none
@@ -13,5 +13,7 @@ extends:
   template: /yaml/kickstarter-templates/package-pipeline.yml@devops
   parameters:
     vmImage: ubuntu-latest
+    requireNvmrc: true
+    allowedPublishingBranches: refs/heads/master
     packageType: npm
     artifactsDirectoryToPublish: $(Build.SourcesDirectory)
