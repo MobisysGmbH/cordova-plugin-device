@@ -4,7 +4,7 @@ resources:
       type: github
       name: MobisysGmbh/devops-templates
       endpoint: MobisysGmbH
-      ref: refs/heads/release/v7
+      ref: refs/heads/release/v8
 
 trigger: none
 pr: none
@@ -16,4 +16,10 @@ extends:
     requireNvmrc: true
     allowedPublishingBranches: refs/heads/master
     packageType: npm
-    artifactsDirectoryToPublish: $(Build.SourcesDirectory)
+    prePublishSteps:
+      - task: CopyFiles@2
+        inputs:
+          Contents: 'mobisys-internal-cordova-plugin-device-*.tgz'
+          TargetFolder: 'publish'
+          CleanTargetFolder: true
+    artifactsDirectoryToPublish: $(Build.SourcesDirectory)/publish
